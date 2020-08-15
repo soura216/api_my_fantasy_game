@@ -56,6 +56,21 @@ class Text extends Auth
             $input['language'] = $this->input->post('language');
             $input['point'] = $this->input->post('point');
             $input['created_at'] = date('Y-m-d h:i:s');
+            if(!empty($_FILES['url'])){
+                $bg_img_name = date("Y-m-d_h:i:s")."-".str_replace(str_split(' ()\\/,:*?"<>|'), '', $_FILES['url']['name']);
+                $config_bg_img['upload_path'] = './uploads/text_bg/';
+                $config_bg_img['file_name'] = $bg_img_name;
+                $config_bg_img['allowed_types'] = 'jpg|jpeg|png|gif';
+                $config_bg_img['encrypt_name'] = TRUE;
+                $this->load->library('upload', $config_bg_img);
+                $this->upload->initialize($config_bg_img);
+                if ( ! $this->upload->do_upload('url') ){
+                    $json = array('status' => false, 'msg' => $this->upload->display_errors());
+                    echo json_encode($json);exit();
+                } else {
+                    $input['url'] = $this->upload->file_name;
+                }
+            } 
             if($this->text_model->create_action($input)){
                 $json['status'] = true;
                 $json['msg'] = "Successfully submitted!";
@@ -80,6 +95,21 @@ class Text extends Auth
              $input['language'] = $this->input->post('language');
             $input['point'] = $this->input->post('point');
             $input['created_at'] = date('Y-m-d h:i:s');
+            if(!empty($_FILES['url'])){
+                $bg_img_name = date("Y-m-d_h:i:s")."-".str_replace(str_split(' ()\\/,:*?"<>|'), '', $_FILES['url']['name']);
+                $config_bg_img['upload_path'] = './uploads/text_bg/';
+                $config_bg_img['file_name'] = $bg_img_name;
+                $config_bg_img['allowed_types'] = 'jpg|jpeg|png|gif';
+                $config_bg_img['encrypt_name'] = TRUE;
+                $this->load->library('upload', $config_bg_img);
+                $this->upload->initialize($config_bg_img);
+                if ( ! $this->upload->do_upload('url') ){
+                    $json = array('status' => false, 'msg' => $this->upload->display_errors());
+                    echo json_encode($json);exit();
+                } else {
+                    $input['url'] = $this->upload->file_name;
+                }
+            } 
             if($this->text_model->update_action($input,$this->input->post('id'))){
                 $json['status'] = true;
                 $json['msg'] = "Successfully updated!";

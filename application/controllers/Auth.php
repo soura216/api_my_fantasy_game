@@ -167,7 +167,7 @@ class Auth extends CI_Controller
 
     public function authentication(){
       /*Admin Users Only */
-        $headers = $this->input->request_headers();
+        $headers =  array_change_key_case($this->input->request_headers(),CASE_LOWER);
         if(isset($headers['x-auth-role']) && $headers['x-auth-role'] == 0){
           if(empty($headers['x-auth-token'])){
             $json['msg'] = "Authentication error";
